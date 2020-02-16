@@ -54,9 +54,9 @@ if __name__ == "__main__":
         print(num_guess, attempts)
 
     for attempt in range(0, attempts):
-        # Loop for the number of attempts and asks at the user to input
-        # his value and check if it is the number generated or not, with
-        # a print of an hint to help the user.
+        # Loop for the number of attempts and asks the user for his value
+        # and check if it is the number generated or not, with a print of
+        # an hint to help the user.
         value = int(input("\nInsert your {0:d}° value: ".format(attempt + 1)))
         retValue = compare_numbers(value, num_guess)
         if retValue == NUMBERS_ARE_EQUAL:
