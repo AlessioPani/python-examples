@@ -57,7 +57,10 @@ if __name__ == "__main__":
         # Loop for the number of attempts and asks the user for his value
         # and check if it is the number generated or not, with a print of
         # an hint to help the user.
-        value = int(input("\nInsert your {0:d}° value: ".format(attempt + 1)))
+        try:
+            value = int(input("\nInsert your {0:d}° value: ".format(attempt + 1)))
+        except:
+            raise TypeError("Only numbers are allowed!")
         retValue = compare_numbers(value, num_guess)
         if retValue == NUMBERS_ARE_EQUAL:
             print("You won! The number generated " \
