@@ -7,6 +7,7 @@ All of the applications will be written to be PEP8 compliant.
   - [Basic level](#basic-level)
     - [Guess the number!](#guess-the-number)
     - [Email slicer](#email-slicer)
+    - [Desktop notifier](#desktop-notifier)
 
 ## Basic level
 ### Guess the number!
@@ -16,3 +17,6 @@ The user can choose the difficult of the game (simple or complex): this choise c
 
 ### Email slicer
 The email slicer is a handy program to get the username and domain name from an email address. It checks if the email provided by the user is valid or not (with a combination of if/elif conditions), with the related exceptions and hints for the user. 
+
+### Desktop notifier 
+A desktop notifier app runs on your system and it will be used to send you notifications after every specific interval of time.
