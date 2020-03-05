@@ -11,6 +11,9 @@ from sqlalchemy.orm import sessionmaker
 # Creation of database class
 Base = declarative_base()
 
+# Creation of a session class object
+Session = sessionmaker()
+
 
 class Contact(Base):
     __tablename__ = 'contact'
@@ -23,11 +26,70 @@ class Contact(Base):
 
 
 def modify_contact():
-    pass
+    session = Session()
+    print("Name: n | Surname: s | Phone: p | Mail: m | Address: a | Exit: x")
+    contact_id = int(input("\nInsert the ID of the contact you want to modify:\n=> "))
+    while True:
+        field = input("Insert the field of the contact to modify: ")
+        if field.lower() == 'n':  # name
+            name = input("Select the new contact name:\n=> ")
+            Contact.update().where(Contact.id == contact_id).\
+                values(Contact.name == name)
+        elif field.lower() == 's':  # surname
+            surname = input("Select the new contact surname:\n=> ")
+            Contact.update().where(Contact.id == contact_id).\
+                values(Contact.surname == surname)
+        elif field.lower() == 'p':  # phone
+            phone = input("Select che new phone number:\n=> ")
+            Contact.update().where(Contact.id == contact_id).\
+                values(Contact.phone == phone)
+        elif field.lower() == 'm':  # mail
+            mail = input("Select the new contact surname:\n=> ")
+            Contact.update().where(Contact.id == contact_id).\
+                values(Contact.mail == mail)
+        elif field.lower() == 'a':  # address
+            address = input("Select the new contact surname:\n=> ")
+            Contact.update().where(Contact.id == contact_id).\
+                values(Contact.address == address)
+        elif field.lower() == 'x':  # exit
+            break
+        else:
+            print("Insert a valid field! Insert 'x' to abort.")
+    session.close()
+
+
+def search_contact():
+    session = Session()
+    surname = input("\nInsert the surname of the contact you're searching for:\n=> ")
+    records = session.query(Contact).filter(Contact.surname == surname).all()
+    print("-"*130)
+    print("{: <10} {: <20} {: <20} {: <40} {: <30} {: <20}".format(
+        'ID', 'SURNAME', 'NAME', 'ADDRESS', 'EMAIL', 'PHONE'
+    ))
+    print("-"*130)
+    for record in records:
+        print("{: <10} {: <20} {: <20} {: <40} {: <30} {: <20}".format(
+            record.id,
+            record.surname, 
+            record.name, 
+            record.address, 
+            record.mail, 
+            record.phone))
+    session.close()
 
 
 def delete_contact():
-    pass
+    try:
+        session = Session()
+        contact_id = int(input("\nInsert the ID of the contact you want to delete:\n=> "))
+        session.query(Contact).filter(Contact.id == contact_id).delete()
+        print("\nContact deleted...DONE")
+    except:
+        print("Some error occurred...rollback session.")
+        session.rollback()
+        raise
+    finally:
+        session.close()
 
 
 def view_contact():
@@ -75,12 +137,12 @@ def insert_contact():
         print("Closing session...DONE\n")
 
 
-if __name__ == "__main__":
+def main():
     # Setup the database engine
     engine = create_engine("sqlite:///address.db")
 
-    # Setup the Session object
-    Session = sessionmaker(bind=engine)
+    # Configure the Session object
+    Session.configure(bind=engine)
 
     # Check if the local database exists. If not, create it with all 
     # the columns. 
@@ -89,13 +151,17 @@ if __name__ == "__main__":
         Base.metadata.create_all(engine)  # Creates table
     
     while True:
+        print("\nAdd a contact: a | Delete a contact: d | Modify a contact: m | Search a contact: s | View contacts: v")
+        print("Exit: x")
         op = input("\nChoise the operation you want to do:\n=> ")
         if op.lower() == 'a':  # Add an entry //OK
             insert_contact()
         elif op.lower() == 'd':  # Delete an entry
-            pass
-        elif op.lower() == 'm':  # Modify an entry
-            pass
+            delete_contact() 
+        elif op.lower() == 'm':  # Modify an entry 
+            modify_contact()
+        elif op.lower() == 's':  # Search for a contact ID //OK
+            search_contact()
         elif op.lower() == 'v':  # View contact table //OK
             view_contact()
         elif op.lower() == 'x':
@@ -103,5 +169,7 @@ if __name__ == "__main__":
             break
         else:
             print("\n### Insert a valid operation code! ###")
-            
 
+
+if __name__ == "__main__":
+    main()    
