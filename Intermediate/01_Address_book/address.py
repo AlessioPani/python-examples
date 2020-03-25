@@ -1,5 +1,5 @@
-# This is an application that implement an address book with a CLI 
-# interface and a SQLite database (managed by sqlalchemy) to mantain 
+# This is an application that implement an address book with a CLI
+# interface and a SQLite database (managed by sqlalchemy) to mantain
 # all the information.
 
 from sqlalchemy import Column, Integer, String, create_engine
@@ -17,8 +17,13 @@ Session = sessionmaker()
 
 
 class Contact(Base):
+    """Class for Contact table.
+
+    Arguments:
+        Base {DeclarativeMeta} -- Database class
+    """
     __tablename__ = 'contact'
-    id = Column(Integer, primary_key = True)
+    id = Column(Integer, primary_key=True)
     name = Column(String(20))
     surname = Column(String(20))
     phone = Column(String(20))
@@ -27,81 +32,109 @@ class Contact(Base):
 
 
 def modify_name(contact_id):
+    """Modify the name of a contact with a specific ID.
+
+    Arguments:
+        contact_id {integer} -- ID of the contact.
+    """
     try:
         session = Session()
         name = input("\nSelect the new contact name:\n=> ")
         session.query(Contact).filter(Contact.id == contact_id).\
-        update({Contact.name: name}, synchronize_session = False)
+            update({Contact.name: name}, synchronize_session=False)
         session.commit()
         print(colored("\nContact's name updated successfully.", "green"))
     except:
-        print(colored("\nSome error occurred...rollback session.","red"))
+        print(colored("\nSome error occurred...rollback session.", "red"))
         session.rollback()
     finally:
         session.close()
-    
-    
+
+
 def modify_surname(contact_id):
-    try:  
+    """Modify the surname of a contact with a specific ID.
+
+    Arguments:
+        contact_id {integer} -- ID of the contact.
+    """
+    try:
         session = Session()
         surname = input("\nSelect the new contact surname:\n=> ")
         session.query(Contact).filter(Contact.id == contact_id).\
-        update({Contact.surname: surname}, synchronize_session = False)
+            update({Contact.surname: surname}, synchronize_session=False)
         session.commit()
         print(colored("\nContact's surname updated successfully.", "green"))
     except:
-        print(colored("\nSome error occurred...rollback session.","red"))
+        print(colored("\nSome error occurred...rollback session.", "red"))
         session.rollback()
     finally:
         session.close()
-    
+
 
 def modify_phone(contact_id):
+    """Modify the phone number of a contact with a specific ID.
+
+    Arguments:
+        contact_id {integer} -- ID of the contact.
+    """
     try:
         session = Session()
         phone = input("\nSelect che new phone number:\n=> ")
         session.query(Contact).filter(Contact.id == contact_id).\
-        update({Contact.phone: phone}, synchronize_session = False)
+            update({Contact.phone: phone}, synchronize_session=False)
         session.commit()
-        print(colored("\nContact's phone num. updated successfully.","green"))
+        print(colored("\nContact's phone num. updated successfully.", "green"))
     except:
-        print(colored("\nSome error occurred...rollback session.","red"))
+        print(colored("\nSome error occurred...rollback session.", "red"))
         session.rollback()
     finally:
         session.close()
-    
+
 
 def modify_mail(contact_id):
+    """Modify the mail address of a contact with a specific ID.
+
+    Arguments:
+        contact_id {integer} -- ID of the contact.
+    """
     try:
         session = Session()
         mail = input("\nSelect the new contact mail:\n=> ")
         session.query(Contact).filter(Contact.id == contact_id).\
-            update({Contact.mail: mail}, synchronize_session = False)
+            update({Contact.mail: mail}, synchronize_session=False)
         session.commit()
-        print(colored("\nContact's email updated successfully.","green"))
+        print(colored("\nContact's email updated successfully.", "green"))
     except:
-        print(colored("\nSome error occurred...rollback session.","red"))
+        print(colored("\nSome error occurred...rollback session.", "red"))
         session.rollback()
     finally:
         session.close()
-    
+
 
 def modify_address(contact_id):
+    """Modify the address of a contact with a specific ID.
+
+    Arguments:
+        contact_id {integer} -- ID of the contact.
+    """
     try:
         session = Session()
         address = input("\nSelect the new contact address:\n=> ")
         session.query(Contact).filter(Contact.id == contact_id).\
-        update({Contact.address: address}, synchronize_session = False)
+            update({Contact.address: address}, synchronize_session=False)
         sessio.commit()
-        print(colored("\nContact's address updated successfully.","green"))
+        print(colored("\nContact's address updated successfully.", "green"))
     except:
-        print(colored("\nSome error occurred...rollback session.","red"))
+        print(colored("\nSome error occurred...rollback session.", "red"))
         session.rollback()
     finally:
         session.close()
-    
+
 
 def modify_wrapper():
+    """A simple wrapper for the "Modify" functionality which runs a specific
+    function, depending on the field of the Contact table to modify.
+    """
     try:
         contact_id = int(input("\nID of the contact to modify:\n=> "))
     except Exception as e:
@@ -133,47 +166,58 @@ def modify_wrapper():
             print(colored("\n### Insert a valid field! ", "red") +
                   colored("Insert 'x' to abort. ###\n", "red"))
 
+
 def search_contact():
+    """This function search for a specific contact from the Contact table,
+    according to the surname provided by the user.
+
+    Also contact's ID will be printed.
+    """
     try:
         session = Session()
         surname = input("Surname of the contact:\n=> ")
         records = session.query(Contact).\
-                  filter(Contact.surname == surname).all()
+            filter(Contact.surname == surname).all()
         print("-"*130)
         print("{: <10} {: <20} {: <20} {: <40} {: <30} {: <20}".format(
             'ID', 'SURNAME', 'NAME', 'ADDRESS', 'EMAIL', 'PHONE'
         ))
         print("-"*130)
         for record in records:
-            print("{: <10} {: <20} {: <20} {: <40} {: <30} {: <20}".format(
+            print("{: <10} {: <20} {: <20} {: <30} {: <30} {: <20}".format(
                 record.id,
-                record.surname, 
-                record.name, 
-                record.address, 
-                record.mail, 
+                record.surname,
+                record.name,
+                record.address,
+                record.mail,
                 record.phone))
     except:
-        print(colored("Some error occurred...rollback session.","red"))
+        print(colored("Some error occurred...rollback session.", "red"))
         session.rollback()
     finally:
         session.close()
 
 
 def delete_contact():
+    """This function deletes a specific contact from the Contact table
+    by the ID provided by the user.
+    """
     try:
         session = Session()
         contact_id = int(input("\nID of the contact to delete:\n=> "))
         session.query(Contact).filter(Contact.id == contact_id).delete()
         session.commit()
-        print(colored("\nContact deleted successfuly.", "green"))
+        print(colored("\nContact deleted successfully.", "green"))
     except:
-        print(colored("Some error occurred...rollback session.","red"))
+        print(colored("Some error occurred...rollback session.", "red"))
         session.rollback()
     finally:
         session.close()
 
 
 def view_contact():
+    """This function shows all of the contacts stored in the database.
+    """
     try:
         session = Session()
         records = session.query(Contact).order_by(Contact.surname).all()
@@ -184,19 +228,21 @@ def view_contact():
         print("-"*130)
         for record in records:
             print("{: <20} {: <20} {: <40} {: <30} {: <20}".format(
-                record.surname, 
-                record.name, 
-                record.address, 
-                record.mail, 
+                record.surname,
+                record.name,
+                record.address,
+                record.mail,
                 record.phone))
     except:
-        print(colored("\nSome error occurred...rollback session.","red"))
+        print(colored("\nSome error occurred...rollback session.", "red"))
         session.rollback()
     finally:
         session.close()
 
 
 def insert_contact():
+    """This function let the user insert a contact in the Contact table.
+    """
     try:
         session = Session()
         cname = input("\nName of the contact: ")
@@ -205,17 +251,17 @@ def insert_contact():
         cmail = input("Insert the mail address: ")
         caddress = input("Insert the address: ")
         new_contact = Contact(
-            name = cname,
-            surname = csurname,
-            phone = cphone,
-            mail = cmail,
-            address = caddress
+            name=cname,
+            surname=csurname,
+            phone=cphone,
+            mail=cmail,
+            address=caddress
         )
         session.add(new_contact)
         session.commit()
         print(colored("\nNew contact added.", "green"))
     except:
-        print(colored("\nSome error occurred...rollback session.","red"))
+        print(colored("\nSome error occurred...rollback session.", "red"))
         session.rollback()
     finally:
         session.close()
@@ -225,12 +271,12 @@ def main():
     # Setup the database engine
     engine = create_engine("sqlite:///address.db")
 
-    # Check if the local database exists. If not, create it with all 
-    # the columns. 
+    # Check if the local database exists. If not, create it with all
+    # the columns.
     if not database_exists(engine.url):
         create_database(engine.url)
         Base.metadata.create_all(engine)  # Creates table
-    
+
     # Configure the Session object
     Session.configure(bind=engine)
 
@@ -245,8 +291,8 @@ def main():
         if op.lower() == 'a':  # Add an entry //OK
             insert_contact()
         elif op.lower() == 'd':  # Delete an entry
-            delete_contact() 
-        elif op.lower() == 'm':  # Modify an entry 
+            delete_contact()
+        elif op.lower() == 'm':  # Modify an entry
             modify_wrapper()
         elif op.lower() == 's':  # Search for a contact ID
             search_contact()
@@ -260,4 +306,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()    
+    main()
