@@ -122,7 +122,7 @@ def modify_address(contact_id):
         address = input("\nSelect the new contact address:\n=> ")
         session.query(Contact).filter(Contact.id == contact_id).\
             update({Contact.address: address}, synchronize_session=False)
-        sessio.commit()
+        session.commit()
         print(colored("\nContact's address updated successfully.", "green"))
     except:
         print(colored("\nSome error occurred...rollback session.", "red"))
