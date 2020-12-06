@@ -10,6 +10,7 @@ All of the applications will be written to be PEP8 compliant.
     - [Desktop notifier](#desktop-notifier)
   - [Intermediate level](#intermediate-level)
     - [Address book](#address-book)
+    - [Exchange Rates API](#exchange-rates-api)
 
 ## Basic level
 ### Guess the number!
@@ -30,3 +31,8 @@ The only dependence you need is pynotifier, which can be installed using the fol
 ## Intermediate level
 ### Address book
 This is an application that implement an address book with a CLI interface and a SQLite database to mantain all the information. The database is managed with SQLAlchemy ORM.
+
+### Exchange Rates API
+Request application using Requests module to communicate with an external service; in this case will be a complete request to Exchangeratesapi's APIs. 
+
+The user must insert the base and the second currency and the application will provide the exchange rate and its date. 
