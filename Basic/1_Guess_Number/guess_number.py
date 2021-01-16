@@ -16,7 +16,7 @@ class SkillException(Exception):
 
     def __str__(self):
         return "{} is an invalid parameter: ".format(self.value) + \
-                "are only accepted 'S' or 'C'!"
+                "only 'S' or 'C' are accepted!"
 
 
 def number_generation(skill):
@@ -24,12 +24,18 @@ def number_generation(skill):
     if skill.upper() == 'S':
         min, max = 0, 10  # Range in the simple case
         attempts = 4
+        print("\nThe number of attempts for a simple game is 4 and the"
+              " range of the number to guess is between 0 and 10. \n")
     elif skill.upper() == 'C':
         min, max = 0, 50  # Range in the complex case
         attempts = 8
+        print("\nThe number of attempts for a simple game is 8 and the"
+              " range of the number to guess is between 0 and 50. \n")
     else:
         raise SkillException(skill.upper())
+    print("Generation of the number...", end=" ")
     num_guess = random.randint(min, max)
+    print("DONE\n")
     return num_guess, attempts
 
 
@@ -60,8 +66,9 @@ if __name__ == "__main__":
         try:
             value = int(input("\nInsert your {0:d}°".format(attempt + 1) +
                               " value: "))
-        except:
-            raise TypeError("Only numbers are allowed!")
+        except ValueError as err:
+            value = 0
+            print("Only numbers are allowed!")
 
         retValue = compare_numbers(value, num_guess)
         if retValue == NUMBERS_ARE_EQUAL:
