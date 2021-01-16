@@ -67,7 +67,7 @@ if __name__ == "__main__":
             value = int(input("\nInsert your {0:d}°".format(attempt + 1) +
                               " value: "))
         except ValueError as err:
-            value = 0
+            value = -1
             print("Only numbers are allowed!")
 
         retValue = compare_numbers(value, num_guess)
